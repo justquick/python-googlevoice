@@ -15,8 +15,14 @@ Bladdsa
 
 1. Edit `settings.py` and add  `paypal.standard.ipn` to your `INSTALLED_APPS` and `PAYPAL_RECEIVER_EMAIL`:
 
+        :::python
         # settings.py
         ...
         INSTALLED_APPS = (... 'paypal.standard.ipn', ...)
         ...
-        PAYPAL_RECEIVER_EMAIL = "yourpaypalemail@example.com"
+	PAYPAL_RECEIVER_EMAIL = "yourpaypalemail@example.com"
+	import os
+	
+	class VoiceTest(unittest.TestCase):
+	    def test_alogin(self):
+		self.voice = Voice()
