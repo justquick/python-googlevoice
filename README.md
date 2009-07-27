@@ -10,41 +10,40 @@ You can use the Python API or command line script to schedule calls, check for n
 INSTALL
 -------------------------------
 
-1. Download the code from GitHub:
+**Download the code from GitHub**
 
     $ git clone git://github.com/justquick/python-googlevoice.git 
 
-1. Install the module
+**Install the module**
 
     $ cd python-googlevoice
     $ sudo python setup.py install
-    
+
 USAGE
 -------------------------------
 
-1. Running the command line script
+**Running the command line script**
 
     $ gvoice
     
-        It will prompt you for your Google Voice Account login credentials. At no point are these credentials saved or distributed to a 3rd party; they are only sent to Google
-        Now try calling someone
+It will prompt you for your Google Voice Account login credentials. At no point are these credentials saved or distributed to a 3rd party; they are only sent to Google
+Now try calling someone
     
     gvoice> call
     
-        Fill in the outgoing number (number you wish to reach) and the forwarding number (the phone to place the call from, usually your Google Voice number). 
-        This will schedule a call between the two numbers, just wait for the forwarding phone to ring and let Google connect you. 
-        To find out the other commands, type `help`.
+Fill in the outgoing number (number you wish to reach) and the forwarding number (the phone to place the call from, usually your Google Voice number). 
+This will schedule a call between the two numbers, just wait for the forwarding phone to ring and let Google connect you. 
+To find out the other commands, type `help`.
 
-1. Try it out in Python
+**Try it out in Python**
     
-    $ python
-    >>> from googlevoice import Voice
-    >>> voice = Voice()
-    >>> voice.login()
-    >>> voice.call(outgoingNumber, forwardingNumber)
+    from googlevoice import Voice
+    voice = Voice()
+    voice.login()
+    voice.call(outgoingNumber, forwardingNumber)
     
-1. Examples
+**Examples**
 
-1. API Documentation
+**API Documentation**
 
-    HTML format located in the `docs` directory 
+HTML format located in the `docs` directory 
