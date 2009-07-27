@@ -53,7 +53,7 @@ class Voice(object):
                 return load(StringIO(self._do_xml_page(page)[0]))
             else:
                 return self._do_xml_page(page)[1]
-        inner.__doc__ = 'Formatted %s for the %s feed' % (format, page)
+        inner.__doc__ = 'Formatted %s for the %s' % (format, page)
         return inner
         
     @property
@@ -124,7 +124,7 @@ class Voice(object):
             'cancelType': 'C2C',
         })
 
-    def sms(self, phoneNumber, text):
+    def send_sms(self, phoneNumber, text):
         """
         Send an SMS message to a given phone number with the given text message
         """
@@ -138,8 +138,13 @@ class Voice(object):
         Download a voicemail MP3 matching the given msg sha1 hash
         Saves files to adir (default current directory)
         ( Message hashes can be found in self.voicemail()['messages'].keys() )
+        Returns location of saved file
         """
-        fo = open(os.path.join(adir, '%s.mp3' % msg), 'wb')
+        for c in msg:
+            assert c in '0123456789abcdef', 'Message id not a sha1 hash'
+        fn = os.path.join(adir, '%s.mp3' % msg)
+        fo = open(fn, 'wb')
         fo.write(self._do_page('download', msg).read())
         fo.close()
+        return fn
         

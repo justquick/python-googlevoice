@@ -4,25 +4,47 @@ Python Google Voice
 Exposing the Google Voice API to the Python language
 ----------------------------------------------------
 
-Allows you to place calls, send sms, download voicemail, check the vaious folders of your Google Voice Account
+Google Voice for Python Allows you to place calls, send sms, download voicemail, and check the vaious folders of your Google Voice Accounts.
+You can use the Python API or command line script to schedule calls, check for new recieved calls/sms, or even sync your recorded voicemails/calls 
 
-Bladdsa
+INSTALL
 -------------------------------
 
 1. Download the code from GitHub:
 
-        git clone git://github.com/asdf asdfl
+    $ git clone git://github.com/justquick/python-googlevoice.git 
 
-1. Edit `settings.py` and add  `paypal.standard.ipn` to your `INSTALLED_APPS` and `PAYPAL_RECEIVER_EMAIL`:
+1. Install the module
 
-        :::python
-        # settings.py
-        ...
-        INSTALLED_APPS = (... 'paypal.standard.ipn', ...)
-        ...
-	PAYPAL_RECEIVER_EMAIL = "yourpaypalemail@example.com"
-	import os
-	
-	class VoiceTest(unittest.TestCase):
-	    def test_alogin(self):
-		self.voice = Voice()
+    $ cd python-googlevoice
+    $ sudo python setup.py install
+    
+USAGE
+-------------------------------
+
+1. Running the command line script
+
+    $ gvoice
+    
+        It will prompt you for your Google Voice Account login credentials. At no point are these credentials saved or distributed to a 3rd party; they are only sent to Google
+        Now try calling someone
+    
+    gvoice> call
+    
+        Fill in the outgoing number (number you wish to reach) and the forwarding number (the phone to place the call from, usually your Google Voice number). 
+        This will schedule a call between the two numbers, just wait for the forwarding phone to ring and let Google connect you. 
+        To find out the other commands, type `help`.
+
+1. Try it out in Python
+    
+    $ python
+    >>> from googlevoice import Voice
+    >>> voice = Voice()
+    >>> voice.login()
+    >>> voice.call(outgoingNumber, forwardingNumber)
+    
+1. Examples
+
+1. API Documentation
+
+    HTML format located in the `docs` directory 
