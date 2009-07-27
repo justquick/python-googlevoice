@@ -13,7 +13,7 @@ class VoiceTest(unittest.TestCase):
         pass#self.voice.call('2025556411','2025551550')
 
     def test_sms(self):
-        pass#self.voice.send_sms('2022971550','ismsu')
+        pass#self.voice.send_sms('2025551550','ismsu')
 
     def test_cancel(self):
         pass#self.voice.cancel('2025556411','2025551550')
@@ -22,7 +22,6 @@ class VoiceTest(unittest.TestCase):
         self.assert_(self.voice.inbox())
     
     def test_download(self):
-        print list(self.voice.voicemail())
         for msg,_ in self.voice.voicemail()['messages'].items():
             break
         self.voice.download(msg)

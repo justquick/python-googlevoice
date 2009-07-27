@@ -32,27 +32,27 @@ class Voice(object):
             setattr(self, name, self._multiformat(name))
             setattr(self, '%s_html' % name, self._multiformat(name, 'html'))
 
-    def _do_page(self, page, data=None, headers={}):
+    def __do_page(self, page, data=None, headers={}):
         if isinstance(data, dict):
             data = urlencode(data)
         if page == 'download':
             return urlopen(Request(getattr(settings, 'DOWNLOAD') + data))
         return urlopen(Request(getattr(settings, page.upper()), data, headers))
 
-    def _do_special_page(self, page, data=None, headers={}):
+    def __do_special_page(self, page, data=None, headers={}):
         if isinstance(data, dict):
             data.update({'_rnr_se':self.special})
-        return self._do_page(page, data, headers)
+        return self.__do_page(page, data, headers)
     
-    def _do_xml_page(self, page):
-        return XMLParser(self._do_special_page('XML_%s' % page).read()).grab()
+    def __do_xml_page(self, page):
+        return XMLParser(self.__do_special_page('XML_%s' % page).read()).grab()
     
     def _multiformat(self, page, format='json'):
         def inner():
             if format == 'json':
-                return load(StringIO(self._do_xml_page(page)[0]))
+                return load(StringIO(self.__do_xml_page(page)[0]))
             else:
-                return self._do_xml_page(page)[1]
+                return self.__do_xml_page(page)[1]
         inner.__doc__ = 'Formatted %s for the %s' % (format, page)
         return inner
         
@@ -82,7 +82,7 @@ class Voice(object):
             from getpass import getpass
             passwd = getpass()
         
-        self._do_page('LOGIN',
+        self.__do_page('LOGIN',
             {'Email':email,'Passwd':passwd},
             {'Content-Type':'application/x-www-form-urlencoded'}
         )
@@ -105,7 +105,7 @@ class Voice(object):
         """
         Make a call to an outgoing number using your forwarding number
         """
-        self._do_special_page('CALL', {
+        self.__do_special_page('CALL', {
             'outgoingNumber':outgoingNumber,
             'forwardingNumber':forwardingNumber,
             'subscriberNumber':subscriberNumber or 'undefined',
@@ -118,7 +118,7 @@ class Voice(object):
         Cancels a call matching outgoing and forwarding numbers (if given)
         Will raise an error if no matching call is being placed
         """
-        self._do_special_page('CANCEL', {
+        self.__do_special_page('CANCEL', {
             'outgoingNumber':outgoingNumber or 'undefined',
             'forwardingNumber':forwardingNumber or 'undefined',
             'cancelType': 'C2C',
@@ -128,7 +128,7 @@ class Voice(object):
         """
         Send an SMS message to a given phone number with the given text message
         """
-        self._do_special_page('SMS', {
+        self.__do_special_page('SMS', {
             'phoneNumber': phoneNumber,
             'text': text,
         })
@@ -144,7 +144,7 @@ class Voice(object):
             assert c in '0123456789abcdef', 'Message id not a sha1 hash'
         fn = os.path.join(adir, '%s.mp3' % msg)
         fo = open(fn, 'wb')
-        fo.write(self._do_page('download', msg).read())
+        fo.write(self.__do_page('download', msg).read())
         fo.close()
         return fn
         
