@@ -38,11 +38,28 @@ To find out the other commands, type `help`.
 **Try it out in Python**
     
     from googlevoice import Voice
+    
     voice = Voice()
-    voice.login()
-    voice.call(outgoingNumber, forwardingNumber)
+    voice.login(email=None, passwd=None)
+    
+    # Calling
+    voice.call(outgoingNumber, forwardingNumber) # Places call
+    voice.cancel(outgoingNumber, forwardingNumber) # Cancels previous call
+    
+    # SMS
+    voice.send_sms(phoneNumber, text) # Sends text message to phoneNumber
+    
+    # Voicemail
+    voice.download(msg) # Download MP3 of voicemail by sha1 hash
+    
+    # Folders
+    print voice.inbox().items() # Prints out dict of vital stats and paginated list of inbox messages
+    print voice.inbox('html') # Prints out raw html listing of folder
+    
     
 **Examples**
+
+Simple examples are located in the `examples` directory
 
 **API Documentation**
 

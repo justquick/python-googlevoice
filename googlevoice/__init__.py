@@ -61,14 +61,18 @@ class Voice(object):
         """
         Returns special identifier for your session (if logged in)
         """
+        if hasattr(self, '_special') and getattr(self, '_special'):
+            return self._special
         try:
             regex = bytes("('_rnr_se':) '(.+)'", 'utf8')
         except NameError:
             regex = r"('_rnr_se':) '(.+)'"
         try:
-            return re.search(regex, urlopen(settings.INBOX).read()).group(2)
+            sp = re.search(regex, urlopen(settings.INBOX).read()).group(2)
         except AttributeError:
-            return None
+            sp = None
+        self._special = sp
+        return sp
     
     def login(self, email=None, passwd=None):
         """
@@ -99,6 +103,7 @@ class Voice(object):
         Logs out an instance and makes sure it does not still have a session
         """
         urlopen(settings.LOGOUT)
+        del self._special 
         assert self.special == None
     
     def call(self, outgoingNumber, forwardingNumber, subscriberNumber=None):

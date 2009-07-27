@@ -3,25 +3,16 @@ import sys
 from optparse import OptionParser
 from googlevoice import Voice,LoginError,input
 
-parser = OptionParser()
-parser.add_option("-e", "--email", dest="email", default=None,
-                  help="Google Voice Account Email")
-parser.add_option("-p", "--password", dest='passwd', default=None,
-                  help='Your account password (prompted for if blank)')
-parser.add_option("-v", "--verbose",
-                  action="store_true", dest="v", default=False,
-                  help="Print status messages")
+parser = OptionParser(usage='''gvoice [-e <email> -p <password>] commands
+    Where commands are
 
-(options, args) = parser.parse_args()
-
-HELP = """
     Voice Commands
-        login (li)
-        logout (lo)
-        call (c)
-        cancelcall (cc)
-        download (d)
-        sendsms (s)
+        login (li) - log into the voice service
+        logout (lo) - log out of the service and make sure cookie is deleted
+        call (c) - call an outgoing number from a forwarding number
+        cancelcall (cc) - cancel a particular call
+        download (d) - download mp3 message given id number
+        sendsms (s) - send sms messages
     
     Folder Views
         inbox (i)
@@ -35,7 +26,16 @@ HELP = """
         recorded (r)
         placed (p)
         recieved (re)
-        missed (m)
+        missed (m)''')
+parser.add_option("-e", "--email", dest="email", default=None,
+                  help="Google Voice Account Email")
+parser.add_option("-p", "--password", dest='passwd', default=None,
+                  help='Your account password (prompted for if blank)')
+
+(options, args) = parser.parse_args()
+
+HELP = """
+
     """
 voice = Voice()
 
@@ -93,7 +93,5 @@ if action == 'interactive':
         elif action in ('recieved','re'): pprint_folder('recieved')
         elif action in ('recorded','r'): pprint_folder('recorded')
         elif action in ('sms','sm'): pprint_folder('sms')
-
-
 else:
     getattr(voice,action)(*args)

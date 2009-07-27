@@ -24,6 +24,7 @@ class VoiceTest(unittest.TestCase):
     def test_download(self):
         for msg,_ in self.voice.voicemail()['messages'].items():
             break
+        if os.path.isfile('%s.mp3' % msg): os.remove('%s.mp3' % msg)
         self.voice.download(msg)
         self.assert_(os.path.isfile('%s.mp3' % msg))
     
