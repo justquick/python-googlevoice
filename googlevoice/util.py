@@ -1,4 +1,4 @@
-import xml.parsers.expat
+from xml.parsers.expat import ParserCreate
 try:
     from urllib2 import build_opener,install_opener, \
         HTTPCookieProcessor,Request,urlopen
@@ -41,7 +41,7 @@ class XMLParser(dict):
 
     def __init__(self, data):
         dict.__init__(self, {'json':'','html':''})
-        p = xml.parsers.expat.ParserCreate()
+        p = ParserCreate()
         p.StartElementHandler = self.start_element
         p.EndElementHandler = self.end_element
         p.CharacterDataHandler = self.char_data

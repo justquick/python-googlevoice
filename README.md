@@ -5,8 +5,8 @@ Exposing the Google Voice API to the Python language
 ----------------------------------------------------
 
 Google Voice for Python Allows you to place calls, send sms, download voicemail, and check the various folders of your Google Voice Accounts.
-You can use the Python API or command line script to schedule calls, check for new recieved calls/sms, or even sync your recorded voicemails/calls 
-Works for Python 2 and Python 3 (sorta[*](#Note))
+You can use the Python API or command line script to schedule calls, check for new recieved calls/sms, or even sync your recorded voicemails/calls.  
+Works for Python 2 and Python 3
 
 INSTALL
 -------------------------------
@@ -27,14 +27,14 @@ USAGE
 
     $ gvoice
     
-It will prompt you for your Google Voice Account login credentials. At no point are these credentials saved or distributed to a 3rd party; they are only sent to Google
+It will prompt you for your Google Voice Account login credentials. At no point are these credentials saved or distributed to a 3rd party; they are only sent to Google. 
 Now try calling someone
     
     gvoice> call
     
 Fill in the outgoing number (number you wish to reach) and the forwarding number (the phone to place the call from, usually your Google Voice number). 
 This will schedule a call between the two numbers, just wait for the forwarding phone to ring and let Google connect you. 
-To find out the other commands, type `help`.
+To find out the other commands, type `help`. 
 
 **Try it out in Python**
     
@@ -67,5 +67,3 @@ Simple examples are located in the `examples` directory
 HTML format located in the `docs` directory
 
 
-<a name="Note"></a>
-When using with Python 3, currently it will not let you call or send sms

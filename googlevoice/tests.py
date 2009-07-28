@@ -2,8 +2,6 @@ from googlevoice import Voice,util
 from os import path,remove
 from unittest import TestCase,main
 
-
-
 class VoiceTest(TestCase):
     voice = Voice()
     voice.login()
