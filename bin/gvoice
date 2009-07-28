@@ -10,10 +10,11 @@ parser = OptionParser(usage='''gvoice [-e <email> -p <password>] commands
         login (li) - log into the voice service
         logout (lo) - log out of the service and make sure cookie is deleted
         call (c) - call an outgoing number from a forwarding number
-        cancelcall (cc) - cancel a particular call
+        cancel (cc) - cancel a particular call
         download (d) - download mp3 message given id number
-        sendsms (s) - send sms messages
-    
+        send_sms (s) - send sms messages
+        help
+        
     Folder Views
         inbox (i)
         voicemail (v)
@@ -30,16 +31,11 @@ parser = OptionParser(usage='''gvoice [-e <email> -p <password>] commands
 parser.add_option("-e", "--email", dest="email", default=None,
                   help="Google Voice Account Email")
 parser.add_option("-p", "--password", dest='passwd', default=None,
-                  help='Your account password (prompted for if blank)')
+                  help='Your account password (prompted if blank)')
 
-(options, args) = parser.parse_args()
+options, args = parser.parse_args()
 
-HELP = """
-
-    """
-voice = Voice()
-
-def login(email=options.email,passwd=options.passwd):
+def login(email=options.email, passwd=options.passwd):
     try:
         voice.login(options.email,options.passwd)
     except LoginError:
@@ -59,9 +55,10 @@ except IndexError:
     action = 'interactive'
 
 if action == 'help':
-    print HELP
+    print parser.usage
     sys.exit(0)
 
+voice = Voice()
 login()
 
 if action == 'interactive':
@@ -82,8 +79,8 @@ if action == 'interactive':
             voice.send_sms(input('Phone number: '), input('Message: '))
             print 'Message Sent'
         elif action in ('download','d'):
-            print 'MP3 downloaded to %s' % voice.download(input('Message id (sha1 hash): '))
-        elif action in ('help','h','?'): print HELP
+            print 'MP3 downloaded to %s' % voice.download(input('Message sha1: '))
+        elif action in ('help','h','?'): print parser.usage
         elif action in ('trash','t'): pprint_folder('trash')
         elif action in ('spam','sp'): pprint_folder('spam')
         elif action in ('voicemail','v'): pprint_folder('voicemail')
@@ -94,4 +91,12 @@ if action == 'interactive':
         elif action in ('recorded','r'): pprint_folder('recorded')
         elif action in ('sms','sm'): pprint_folder('sms')
 else:
+    if action == 'send_sms':
+        try:
+            num,args = args[0],args[1:]
+        except:
+            print 'Please provide a message'
+            sys.exit(0)
+        args = (num, ' '.join(args))
+    help(getattr(voice,action))
     getattr(voice,action)(*args)

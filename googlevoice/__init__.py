@@ -1,38 +1,26 @@
-import os
-import re
-
-try:
-    from urllib2 import build_opener,install_opener,HTTPCookieProcessor,Request,urlopen
-    from urllib import urlencode,urlretrieve
-except ImportError:
-    from urllib.request import urlretrieve,build_opener,install_opener,HTTPCookieProcessor,Request,urlopen
-    from urllib.parse import urlencode
-try:
-    from io import StringIO
-except ImportError:
-    try:
-        from cStringIO import StringIO
-    except ImportError:
-        from StringIO import StringIO
-
-
 from googlevoice import settings
 from googlevoice.util import *
 
 class Voice(object):
     """
     Main voice instance for interacting with the Google Voice service
+    Also contains callable methods for each folder (eg inbox,voicemail,sms,etc)
     """
     def __init__(self):
-        self.jar = LWPCookieJar()
-        self.opener = build_opener(HTTPCookieProcessor(self.jar))
-        install_opener(self.opener)
+        try:
+            from http.cookiejar import LWPCookieJar as CJ
+        except ImportError:
+            from cookielib import LWPCookieJar as CJ
+        install_opener(build_opener(HTTPCookieProcessor(CJ())))
         
         for name in settings.FEEDS:
-            setattr(self, name, self._multiformat(name))
-            setattr(self, '%s_html' % name, self._multiformat(name, 'html'))
+            setattr(self, name, self.__multiformat(name))
+            setattr(self, '%s_html' % name, self.__multiformat(name, 'html'))
 
     def __do_page(self, page, data=None, headers={}):
+        """
+        Loads a page out of the settings and pass it on to urllib Request
+        """
         if isinstance(data, dict):
             data = urlencode(data)
         if page == 'download':
@@ -40,14 +28,25 @@ class Voice(object):
         return urlopen(Request(getattr(settings, page.upper()), data, headers))
 
     def __do_special_page(self, page, data=None, headers={}):
+        """
+        Add self.special to request data
+        """
         if isinstance(data, dict):
             data.update({'_rnr_se':self.special})
         return self.__do_page(page, data, headers)
     
     def __do_xml_page(self, page):
-        return XMLParser(self.__do_special_page('XML_%s' % page).read()).grab()
+        """
+        Parses XML folder page (eg inbox,voicemail,sms,etc)
+        Returns a str tuple (json format, html format)
+        """
+        return XMLParser(self.__do_special_page('XML_%s' % page).read())()
     
-    def _multiformat(self, page, format='json'):
+    def __multiformat(self, page, format='json'):
+        """
+        Uses json/simplejson to load given format from folder page
+        Returns wrapped function available at self.
+        """
         def inner():
             if format == 'json':
                 return load(StringIO(self.__do_xml_page(page)[0]))
@@ -61,6 +60,7 @@ class Voice(object):
         """
         Returns special identifier for your session (if logged in)
         """
+        import re
         if hasattr(self, '_special') and getattr(self, '_special'):
             return self._special
         try:
@@ -86,10 +86,7 @@ class Voice(object):
             from getpass import getpass
             passwd = getpass()
         
-        self.__do_page('LOGIN',
-            {'Email':email,'Passwd':passwd},
-            {'Content-Type':'application/x-www-form-urlencoded'}
-        )
+        self.__do_page('LOGIN', {'Email':email,'Passwd':passwd})
         
         del email,passwd
         
@@ -142,12 +139,13 @@ class Voice(object):
         """
         Download a voicemail MP3 matching the given msg sha1 hash
         Saves files to adir (default current directory)
-        ( Message hashes can be found in self.voicemail()['messages'].keys() )
+        Message hashes can be found in list(self.voicemail()['messages'])
         Returns location of saved file
         """
+        from os.path import join
         for c in msg:
             assert c in '0123456789abcdef', 'Message id not a sha1 hash'
-        fn = os.path.join(adir, '%s.mp3' % msg)
+        fn = join(adir, '%s.mp3' % msg)
         fo = open(fn, 'wb')
         fo.write(self.__do_page('download', msg).read())
         fo.close()
