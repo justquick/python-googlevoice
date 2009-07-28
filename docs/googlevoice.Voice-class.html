@@ -54,8 +54,8 @@
     </td>
   </tr>
 </table>
-<!-- ==================== TYPE DESCRIPTION ==================== -->
-<h1 class="epydoc">type Voice</h1><p class="nomargin-top"><span class="codelink"><a href="googlevoice-pysrc.html#Voice">source&nbsp;code</a></span></p>
+<!-- ==================== CLASS DESCRIPTION ==================== -->
+<h1 class="epydoc">Class Voice</h1><p class="nomargin-top"><span class="codelink"><a href="googlevoice-pysrc.html#Voice">source&nbsp;code</a></span></p>
 <pre class="base-tree">
 object --+
          |
@@ -63,7 +63,9 @@ object --+
 </pre>
 
 <hr />
-<p>Main voice instance for interacting with the Google Voice service</p>
+<p>Main voice instance for interacting with the Google Voice service Also
+  contains callable methods for each folder (eg 
+  inbox,voicemail,sms,etc)</p>
 
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
@@ -107,7 +109,8 @@ object --+
           <td><span class="summary-sig"><a name="__do_page"></a><span class="summary-sig-name">__do_page</span>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">page</span>,
         <span class="summary-sig-arg">data</span>=<span class="summary-sig-default">None</span>,
-        <span class="summary-sig-arg">headers</span>=<span class="summary-sig-default"><code class="variable-group">{</code><code class="variable-group">}</code></span>)</span></td>
+        <span class="summary-sig-arg">headers</span>=<span class="summary-sig-default">{}</span>)</span><br />
+      Loads a page out of the settings and pass it on to urllib Request</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="googlevoice-pysrc.html#Voice.__do_page">source&nbsp;code</a></span>
             
@@ -126,7 +129,8 @@ object --+
           <td><span class="summary-sig"><a name="__do_special_page"></a><span class="summary-sig-name">__do_special_page</span>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">page</span>,
         <span class="summary-sig-arg">data</span>=<span class="summary-sig-default">None</span>,
-        <span class="summary-sig-arg">headers</span>=<span class="summary-sig-default"><code class="variable-group">{</code><code class="variable-group">}</code></span>)</span></td>
+        <span class="summary-sig-arg">headers</span>=<span class="summary-sig-default">{}</span>)</span><br />
+      Add self.special to request data</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="googlevoice-pysrc.html#Voice.__do_special_page">source&nbsp;code</a></span>
             
@@ -143,7 +147,9 @@ object --+
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
           <td><span class="summary-sig"><a name="__do_xml_page"></a><span class="summary-sig-name">__do_xml_page</span>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">page</span>)</span></td>
+        <span class="summary-sig-arg">page</span>)</span><br />
+      Parses XML folder page (eg inbox,voicemail,sms,etc) Returns a str 
+      tuple (json format, html format)</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="googlevoice-pysrc.html#Voice.__do_xml_page">source&nbsp;code</a></span>
             
@@ -159,11 +165,30 @@ object --+
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="_multiformat"></a><span class="summary-sig-name">_multiformat</span>(<span class="summary-sig-arg">self</span>,
+          <td><span class="summary-sig"><a name="__multiformat"></a><span class="summary-sig-name">__multiformat</span>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">page</span>,
-        <span class="summary-sig-arg">format</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">json</code><code class="variable-quote">'</code></span>)</span></td>
+        <span class="summary-sig-arg">format</span>=<span class="summary-sig-default">'json'</span>)</span><br />
+      Uses json/simplejson to load given format from folder page Returns 
+      wrapped function available at self.</td>
           <td align="right" valign="top">
-            <span class="codelink"><a href="googlevoice-pysrc.html#Voice._multiformat">source&nbsp;code</a></span>
+            <span class="codelink"><a href="googlevoice-pysrc.html#Voice.__multiformat">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="googlevoice.Voice-class.html#special" class="summary-sig-name">special</a>(<span class="summary-sig-arg">self</span>)</span><br />
+      Returns special identifier for your session (if logged in)</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="googlevoice-pysrc.html#Voice.special">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -296,10 +321,10 @@ object --+
         <tr>
           <td><span class="summary-sig"><a name="download"></a><span class="summary-sig-name">download</span>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">msg</span>,
-        <span class="summary-sig-arg">adir</span>=<span class="summary-sig-default"><code class="variable-quote">'</code><code class="variable-string">.</code><code class="variable-quote">'</code></span>)</span><br />
+        <span class="summary-sig-arg">adir</span>=<span class="summary-sig-default">'.'</span>)</span><br />
       Download a voicemail MP3 matching the given msg sha1 hash Saves files
-      to adir (default current directory) ( Message hashes can be found in 
-      self.voicemail()['messages'].keys() ) Returns location of saved file</td>
+      to adir (default current directory) Message hashes can be found in 
+      list(self.voicemail()['messages']) Returns location of saved file</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="googlevoice-pysrc.html#Voice.download">source&nbsp;code</a></span>
             
@@ -307,32 +332,6 @@ object --+
         </tr>
       </table>
       
-    </td>
-  </tr>
-</table>
-<!-- ==================== PROPERTIES ==================== -->
-<a name="section-Properties"></a>
-<table class="summary" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr bgcolor="#70b0f0" class="table-header">
-  <td colspan="2" class="table-header">
-    <table border="0" cellpadding="0" cellspacing="0" width="100%">
-      <tr valign="top">
-        <td align="left"><span class="table-header">Properties</span></td>
-        <td align="right" valign="top"
-         ><span class="options">[<a href="#section-Properties"
-         class="privatelink" onclick="toggle_private();"
-         >hide private</a>]</span></td>
-      </tr>
-    </table>
-  </td>
-</tr>
-<tr>
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-        <a href="googlevoice.Voice-class.html#special" class="summary-name">special</a><br />
-      Returns special identifier for your session (if logged in)
     </td>
   </tr>
 </table>
@@ -378,33 +377,26 @@ object --+
   </dl>
 </td></tr></table>
 </div>
-<br />
-<!-- ==================== PROPERTY DETAILS ==================== -->
-<a name="section-PropertyDetails"></a>
-<table class="details" border="1" cellpadding="3"
-       cellspacing="0" width="100%" bgcolor="white">
-<tr bgcolor="#70b0f0" class="table-header">
-  <td colspan="2" class="table-header">
-    <table border="0" cellpadding="0" cellspacing="0" width="100%">
-      <tr valign="top">
-        <td align="left"><span class="table-header">Property Details</span></td>
-        <td align="right" valign="top"
-         ><span class="options">[<a href="#section-PropertyDetails"
-         class="privatelink" onclick="toggle_private();"
-         >hide private</a>]</span></td>
-      </tr>
-    </table>
-  </td>
-</tr>
-</table>
 <a name="special"></a>
 <div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
-  <h3 class="epydoc">special</h3>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">special</span>(<span class="sig-arg">self</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="googlevoice-pysrc.html#Voice.special">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
   <p>Returns special identifier for your session (if logged in)</p>
   <dl class="fields">
+    <dt>Decorators:</dt>
+    <dd><ul class="nomargin-top">
+        <li><code>@property</code></li>
+    </ul></dd>
   </dl>
 </td></tr></table>
 </div>
@@ -436,7 +428,7 @@ object --+
   <tr>
     <td align="left" class="footer">
     Generated by Epydoc 3.0.1
-    on Mon Jul 27 14:51:26 2009
+    on Tue Jul 28 11:07:46 2009
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"
