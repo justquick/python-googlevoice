@@ -1,8 +1,6 @@
 Python Google Voice
 =============
 
-The project has already moved into a shiny new namespace
+The project has already moved into a shiny new namespace:
+[PyGoogleVoice](http://code.google.com/p/pygooglevoice) @ GoogleCode
 ----------------------------------------------------
-
-[PyGoogleVoice](http://code.google.com/p/pygooglevoice) @ Google Code
--------------------------------
