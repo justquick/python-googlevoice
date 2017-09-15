@@ -2,5 +2,5 @@ Python Google Voice
 =============
 
 The project has already moved into a shiny new namespace:
-[PyGoogleVoice](http://code.google.com/p/pygooglevoice) @ GoogleCode
+[PyGoogleVoice](https://bitbucket.org/tom_slick/pygooglevoice) @ BitBucket
 ----------------------------------------------------
